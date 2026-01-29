@@ -1,9 +1,8 @@
-export interface Task {
+export interface Assignment {
   id: string,
   title: string,
+  dueDate: string,
   subjectId: string,
-  date: string,
-  priority: 'High' | 'Medium' | 'Low',
   completed: boolean,
   userId: string
 }
