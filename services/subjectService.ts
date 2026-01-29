@@ -105,9 +105,47 @@ export const updateSubject = async (
   })
 }
 
-// ---------------------------------------------------------
-// DELETE
-// ---------------------------------------------------------
+// ------------------------------
+// GET SUBJECTS WITH TASK COUNT
+// ------------------------------
+export type SubjectWithTaskCount = Subject & { taskCount: number }
+
+export const getSubjectsWithTaskCount = async (): Promise<SubjectWithTaskCount[]> => {
+  const user = auth.currentUser
+  if (!user) throw new Error('User not authenticated.')
+
+  const q = query(
+    subjectsCollection,
+    where('userId', '==', user.uid),
+    orderBy('createdAt', 'desc')
+  )
+  const snapshot = await getDocs(q)
+  const subjects: SubjectWithTaskCount[] = []
+
+  for (const docSnap of snapshot.docs) {
+    const data = docSnap.data()
+    const subjectId = docSnap.id
+
+    // Count tasks for this subject
+    const tasksQuery = query(collection(db, 'tasks'), where('subjectId', '==', subjectId))
+    const tasksSnapshot = await getDocs(tasksQuery)
+    const taskCount = tasksSnapshot.size
+
+    subjects.push({
+      id: subjectId,
+      name: data.name ?? '',
+      color: data.color ?? undefined,
+      userId: data.userId,
+      taskCount
+    })
+  }
+
+  return subjects
+}
+
+// ------------------------------
+// DELETE SUBJECT (Prevent if tasks exist)
+// ------------------------------
 export const deleteSubject = async (id: string) => {
   const user = auth.currentUser
   if (!user) throw new Error('User not authenticated.')
@@ -117,6 +155,13 @@ export const deleteSubject = async (id: string) => {
 
   if (!snap.exists()) throw new Error('Subject not found')
   if (snap.data().userId !== user.uid) throw new Error('Unauthorized')
+
+  // Check if tasks exist
+  const tasksQuery = query(collection(db, 'tasks'), where('subjectId', '==', id))
+  const tasksSnapshot = await getDocs(tasksQuery)
+  if (!tasksSnapshot.empty) {
+    throw new Error('Cannot delete this subject. There are tasks associated with it.')
+  }
 
   await deleteDoc(ref)
 }

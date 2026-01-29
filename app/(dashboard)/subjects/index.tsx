@@ -3,22 +3,21 @@ import React, { useCallback, useState } from "react"
 import { MaterialIcons } from "@expo/vector-icons"
 import { useFocusEffect, useRouter } from "expo-router"
 import { useLoader } from "@/hooks/useLoader"
-import { getAllSubjects, deleteSubject } from "@/services/subjectService"
-import { Subject } from "@/types/subjects"
+import { getSubjectsWithTaskCount, deleteSubject, SubjectWithTaskCount } from "@/services/subjectService"
 
 const Subjects = () => {
   const router = useRouter()
   const { showLoader, hideLoader } = useLoader()
-  const [subjects, setSubjects] = useState<Subject[]>([])
+  const [subjects, setSubjects] = useState<SubjectWithTaskCount[]>([])
 
   const fetchSubjects = async () => {
     showLoader()
     try {
-      const data = await getAllSubjects()
+      const data = await getSubjectsWithTaskCount()
       setSubjects(data)
-    } catch (error) {
+    } catch (error: any) {
       Alert.alert("Error", "Failed to load subjects")
-      console.log("Error", error)
+      console.log("Error", error.message)
     } finally {
       hideLoader()
     }
@@ -44,8 +43,8 @@ const Subjects = () => {
             try {
               await deleteSubject(id)
               fetchSubjects()
-            } catch {
-              Alert.alert("Error", "Could not delete subject")
+            } catch (err: any) {
+              Alert.alert("Error", err.message)
             } finally {
               hideLoader()
             }
@@ -78,7 +77,7 @@ const Subjects = () => {
               <View className="flex-row justify-between items-center">
                 <View>
                   <Text className="text-gray-800 text-lg font-semibold">
-                    {subject.name}
+                    {subject.name} ({subject.taskCount} tasks)
                   </Text>
                   {subject.color && (
                     <Text className="text-sm text-gray-500">
