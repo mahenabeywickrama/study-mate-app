@@ -5,14 +5,22 @@ import { Stack } from "expo-router"
 
 const TasksLayout = () => {
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false
-      }}
-    >
-      <Stack.Screen name="index" />
-      <Stack.Screen name="form" />
-      <Stack.Screen name="[id]" />
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{ title: "My Tasks" }}
+      />
+      <Stack.Screen
+        name="form"
+        options={{
+          title: "Task Details",
+          headerBackTitle: "Back"
+        }}
+      />
+      <Stack.Screen
+        name="[id]"
+        options={{ title: "Task" }}
+      />
     </Stack>
   )
 }

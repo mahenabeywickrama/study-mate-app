@@ -85,14 +85,6 @@ const AssignmentForm = () => {
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
-      <TouchableOpacity
-        className="flex-row items-center mb-6"
-        onPress={() => router.back()}
-      >
-        <MaterialIcons name="arrow-back-ios" size={24} color="#333" />
-        <Text className="text-gray-800 font-medium ml-1">Back</Text>
-      </TouchableOpacity>
-
       <View className="p-6 rounded-2xl bg-white border border-gray-300 shadow-md">
         {/* Title */}
         <Text className="text-gray-800 text-lg font-semibold mb-2">

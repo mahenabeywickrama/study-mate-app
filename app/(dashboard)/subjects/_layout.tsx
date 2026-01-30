@@ -3,10 +3,22 @@ import { Stack } from "expo-router"
 
 const SubjectsLayout = () => {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="form" />
-      <Stack.Screen name="[id]" />
+    <Stack>
+      <Stack.Screen
+        name="index"
+        options={{ title: "My Subjects" }}
+      />
+      <Stack.Screen
+        name="form"
+        options={{
+          title: "Subject Details",
+          headerBackTitle: "Back"
+        }}
+      />
+      <Stack.Screen
+        name="[id]"
+        options={{ title: "Subject" }}
+      />
     </Stack>
   )
 }

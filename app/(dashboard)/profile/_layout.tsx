@@ -1,26 +1,24 @@
-import React from "react"
+// app/(profile)/_layout.tsx
 import { Stack } from "expo-router"
 
-const AssignmentsLayout = () => {
+export default function ProfileLayout() {
   return (
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: "My Assignments" }}
+        options={{ title: "My Profile" }}
       />
       <Stack.Screen
         name="form"
         options={{
-          title: "Assignment Details",
+          title: "Edit Profile",
           headerBackTitle: "Back"
         }}
       />
       <Stack.Screen
         name="[id]"
-        options={{ title: "Assignment" }}
+        options={{ title: "Profile" }}
       />
     </Stack>
   )
 }
-
-export default AssignmentsLayout
