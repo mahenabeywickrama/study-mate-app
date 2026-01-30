@@ -1,5 +1,6 @@
 import { useLoader } from "@/hooks/useLoader"
 import { auth } from "@/services/firebase"
+import { createProfileIfNotExists } from "@/services/profilesService"
 import { onAuthStateChanged, User } from "firebase/auth"
 import { createContext, ReactNode, useEffect, useState } from "react"
 
@@ -19,8 +20,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     showLoader()
-    const unsucribe = onAuthStateChanged(auth, (usr) => {
+    const unsucribe = onAuthStateChanged(auth, async (usr) => {
       setUser(usr)
+      if (usr) {
+        await createProfileIfNotExists()
+      }
       hideLoader()
     })
 
