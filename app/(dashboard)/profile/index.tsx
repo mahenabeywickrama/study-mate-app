@@ -8,7 +8,7 @@ interface Profile {
   id: string
   name: string
   email: string
-  photoURL?: string
+  photoUrl?: string
   bio?: string
 }
 
@@ -27,15 +27,15 @@ const Profile = () => {
   return (
     <View className="flex-1 bg-gray-50 p-6">
       <View className="bg-white rounded-2xl p-6 shadow-md items-center">
-        {profile.photoURL ? (
-          <Image
-            source={{ uri: profile.photoURL }}
+        {profile.photoUrl ? (
+        <Image
+            source={{ uri: profile.photoUrl }}
             className="w-28 h-28 rounded-full mb-4"
-          />
+        />
         ) : (
-          <View className="w-28 h-28 rounded-full bg-gray-300 mb-4 items-center justify-center">
+        <View className="w-28 h-28 rounded-full bg-gray-300 mb-4 items-center justify-center">
             <MaterialIcons name="person" size={48} color="#6B7280" />
-          </View>
+        </View>
         )}
 
         <Text className="text-xl font-bold">{profile.name}</Text>

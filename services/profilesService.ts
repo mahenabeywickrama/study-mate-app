@@ -1,5 +1,3 @@
-// services/profileService.ts
-
 import { getAuth } from "firebase/auth"
 import {
   doc,
@@ -8,13 +6,15 @@ import {
   updateDoc,
   serverTimestamp
 } from "firebase/firestore"
+
 import { db } from "./firebase"
 import { Profile } from "@/types/profiles"
+import { uploadImageToCloudinary } from "@/utils/cloudinary"
 
 const auth = getAuth()
 
 // ---------------------------------------------------------
-// CREATE (on first login / register)
+// CREATE
 // ---------------------------------------------------------
 export const createProfileIfNotExists = async (name?: string) => {
   const user = auth.currentUser
@@ -23,12 +23,12 @@ export const createProfileIfNotExists = async (name?: string) => {
   const ref = doc(db, "profiles", user.uid)
   const snap = await getDoc(ref)
 
-  if (snap.exists()) return // already created
+  if (snap.exists()) return
 
   await setDoc(ref, {
     name: name ?? user.displayName ?? "",
     email: user.email ?? "",
-    avatarUrl: user.photoURL ?? null,
+    photoUrl: user.photoURL ?? null,
     userId: user.uid,
     createdAt: serverTimestamp(),
     updatedAt: serverTimestamp()
@@ -36,15 +36,13 @@ export const createProfileIfNotExists = async (name?: string) => {
 }
 
 // ---------------------------------------------------------
-// READ (current user)
+// READ
 // ---------------------------------------------------------
 export const getMyProfile = async (): Promise<Profile> => {
   const user = auth.currentUser
   if (!user) throw new Error("User not authenticated.")
 
-  const ref = doc(db, "profiles", user.uid)
-  const snap = await getDoc(ref)
-
+  const snap = await getDoc(doc(db, "profiles", user.uid))
   if (!snap.exists()) throw new Error("Profile not found")
 
   const data = snap.data()
@@ -53,26 +51,37 @@ export const getMyProfile = async (): Promise<Profile> => {
     id: snap.id,
     name: data.name ?? "",
     email: data.email ?? "",
-    avatarUrl: data.avatarUrl ?? undefined,
+    photoUrl: data.photoUrl ?? undefined,
     userId: data.userId
   }
 }
 
 // ---------------------------------------------------------
-// UPDATE
+// UPDATE NAME
 // ---------------------------------------------------------
-export const updateMyProfile = async (
-  name: string,
-  avatarUrl?: string
-) => {
+export const updateMyProfile = async (name: string) => {
   const user = auth.currentUser
   if (!user) throw new Error("User not authenticated.")
 
-  const ref = doc(db, "profiles", user.uid)
-
-  await updateDoc(ref, {
+  await updateDoc(doc(db, "profiles", user.uid), {
     name,
-    avatarUrl: avatarUrl ?? null,
     updatedAt: serverTimestamp()
   })
+}
+
+// ---------------------------------------------------------
+// UPDATE PHOTO (Cloudinary only)
+// ---------------------------------------------------------
+export const updateProfilePhoto = async (localUri: string) => {
+  const user = auth.currentUser
+  if (!user) throw new Error("Not logged in")
+
+  const imageUrl = await uploadImageToCloudinary(localUri)
+
+  await updateDoc(doc(db, "profiles", user.uid), {
+    photoUrl: imageUrl, // ✅ consistent naming
+    updatedAt: serverTimestamp()
+  })
+
+  return imageUrl
 }
