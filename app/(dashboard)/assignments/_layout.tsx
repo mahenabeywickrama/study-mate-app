@@ -6,7 +6,10 @@ const AssignmentsLayout = () => {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: "My Assignments" }}
+        options={{ 
+          title: "My Assignments",
+          headerTitleAlign: "center"
+        }}
       />
       <Stack.Screen
         name="form"

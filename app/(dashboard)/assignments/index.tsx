@@ -67,20 +67,29 @@ const Assignments = () => {
   return (
     <View className="flex-1 bg-gray-50">
 
-      {/* Tabs (same as Tasks) */}
-      <View className="flex-row justify-around py-3 bg-white border-b border-gray-200">
-        {(["All", "Completed", "Pending", "Overdue"] as Tab[]).map(tab => (
-          <TouchableOpacity key={tab} onPress={() => setActiveTab(tab)}>
-            <Text
-              className={`text-lg font-semibold ${
-                activeTab === tab ? "text-blue-600" : "text-gray-500"
-              }`}
-            >
-              {tab}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+    {/* Tabs */}
+    <View className="flex-row justify-around py-4">
+      {(["All", "Completed", "Pending", "Overdue"] as Tab[]).map(tab => (
+        <TouchableOpacity
+          key={tab}
+          onPress={() => setActiveTab(tab)}
+          activeOpacity={0.7}
+          className={`px-4 py-2 rounded-full ${
+            activeTab === tab
+              ? "bg-blue-600 shadow-md"
+              : "bg-gray-200"
+          }`}
+        >
+          <Text
+            className={`text-sm font-semibold ${
+              activeTab === tab ? "text-white" : "text-gray-600"
+            }`}
+          >
+            {tab}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
 
       {/* Add Assignment */}
       <TouchableOpacity
@@ -99,45 +108,41 @@ const Assignments = () => {
           assignments.map(a => (
             <View
               key={a.id}
-              className="bg-white p-4 rounded-2xl mb-4 border border-gray-300 shadow-md"
+              className="p-5 rounded-2xl mb-4 shadow-md border border-gray-200"
+              style={{
+                backgroundColor:
+                  a.completed ? "#d1fae5" : new Date(a.dueDate) < new Date() ? "#fee2e2" : "#fff"
+              }}
             >
-              <TouchableOpacity
-                onPress={() =>
-                  router.push({ pathname: "/assignments/[id]", params: { id: a.id } })
-                }
-                className="flex-row justify-between items-center mb-2"
-              >
+              <View className="flex-row justify-between items-start">
                 <View className="flex-1 mr-2">
-                  <Text className="text-gray-800 text-lg font-semibold mb-1">
+                  <Text
+                    className={`text-lg font-bold ${
+                      a.completed ? "text-green-700" :
+                      new Date(a.dueDate) < new Date() ? "text-red-700" : "text-gray-800"
+                    }`}
+                  >
                     {a.title}
                   </Text>
-                  <Text className="text-gray-500 mb-1">
-                    Subject: {subjectsMap[a.subjectId]}
-                  </Text>
+                  <Text className="text-gray-500 mt-1">Subject: {subjectsMap[a.subjectId]}</Text>
                   <Text
-                    className={`font-medium mb-1 ${
-                      getStatusText(a) === "Completed"
-                        ? "text-green-600"
-                        : getStatusText(a) === "Overdue"
-                        ? "text-red-600"
-                        : "text-yellow-600"
+                    className={`font-semibold mt-2 ${
+                      getStatusText(a) === "Completed" ? "text-green-600" :
+                      getStatusText(a) === "Overdue" ? "text-red-600" : "text-yellow-600"
                     }`}
                   >
                     {getStatusText(a)}
                   </Text>
-                  <Text className="text-gray-400 text-sm">
-                    Due: {formatDate(a.dueDate)}
-                  </Text>
+                  <Text className="text-gray-400 text-sm mt-1">Due: {formatDate(a.dueDate)}</Text>
                 </View>
 
-                {/* Complete toggle (same UX as Tasks) */}
                 <TouchableOpacity
                   onPress={e => {
                     e.stopPropagation()
                     toggleAssignmentCompleted(a.id, !a.completed).then(fetchAssignments)
                   }}
                   className={`p-2 rounded-full ${
-                    a.completed ? "bg-green-100" : "bg-gray-100"
+                    a.completed ? "bg-green-200" : "bg-gray-200"
                   }`}
                 >
                   <MaterialIcons
@@ -146,37 +151,28 @@ const Assignments = () => {
                     color={a.completed ? "#16A34A" : "#6B7280"}
                   />
                 </TouchableOpacity>
-              </TouchableOpacity>
+              </View>
 
-              {/* Actions (identical to Tasks) */}
-              <View className="flex-row justify-end mt-2 space-x-3">
+              <View className="flex-row justify-end mt-3 space-x-3 gap-2">
                 <TouchableOpacity
                   onPress={() =>
-                    router.push({
-                      pathname: "/assignments/form",
-                      params: { id: a.id }
-                    })
+                    router.push({ pathname: "/assignments/form", params: { id: a.id } })
                   }
-                  className="p-2 rounded-full bg-yellow-500"
+                  className="p-2 rounded-full bg-yellow-500 shadow-md"
                 >
-                  <MaterialIcons name="edit" size={28} color="#fff" />
+                  <MaterialIcons name="edit" size={22} color="#fff" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={() =>
                     Alert.alert("Delete Assignment", "Are you sure?", [
                       { text: "Cancel", style: "cancel" },
-                      {
-                        text: "Delete",
-                        style: "destructive",
-                        onPress: () =>
-                          deleteAssignment(a.id).then(fetchAssignments)
-                      }
+                      { text: "Delete", style: "destructive", onPress: () => deleteAssignment(a.id).then(fetchAssignments) }
                     ])
                   }
-                  className="p-2 rounded-full bg-red-500"
+                  className="p-2 rounded-full bg-red-500 shadow-md"
                 >
-                  <MaterialIcons name="delete" size={28} color="#fff" />
+                  <MaterialIcons name="delete" size={22} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>
