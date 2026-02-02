@@ -8,7 +8,10 @@ const TasksLayout = () => {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: "My Tasks" }}
+        options={{ 
+          title: "My Tasks",
+          headerTitleAlign: "center"
+        }}
       />
       <Stack.Screen
         name="form"

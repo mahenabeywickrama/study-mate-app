@@ -1,5 +1,3 @@
-// (dashboard)/tasks/index.tsx
-
 import { View, Text, TouchableOpacity, ScrollView, Alert } from "react-native"
 import React, { useCallback, useState } from "react"
 import { MaterialIcons } from "@expo/vector-icons"
@@ -23,21 +21,21 @@ const Tasks = () => {
     try {
       const allTasks = await getAllTasks()
 
-      // Filter by tab
       let filteredTasks = allTasks
       if (activeTab === "Completed") filteredTasks = allTasks.filter(t => t.completed)
       if (activeTab === "Pending") filteredTasks = allTasks.filter(t => !t.completed)
 
       setTasks(filteredTasks)
 
-      // Load subject names
       const map: Record<string, string> = {}
       for (const t of filteredTasks) {
         if (!map[t.subjectId]) {
           try {
             const subj = await getSubjectById(t.subjectId)
             map[t.subjectId] = subj.name
-          } catch { map[t.subjectId] = "Unknown" }
+          } catch {
+            map[t.subjectId] = "Unknown"
+          }
         }
       }
       setSubjectsMap(map)
@@ -76,47 +74,70 @@ const Tasks = () => {
   const formatDate = (d: string) => new Date(d).toLocaleString()
 
   return (
-    <View className="flex-1 bg-gray-50">
-      {/* Tabs */}
-      <View className="flex-row justify-around py-3 bg-white border-b border-gray-200">
-        {(["All", "Completed", "Pending"] as Tab[]).map(tab => (
-          <TouchableOpacity key={tab} onPress={() => setActiveTab(tab)}>
-            <Text className={`text-lg font-semibold ${activeTab===tab ? "text-blue-600" : "text-gray-500"}`}>{tab}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+    <View className="flex-1 bg-gray-50 relative">
+    {/* Tabs */}
+    <View className="flex-row justify-around py-4">
+      {(["All", "Completed", "Pending"] as Tab[]).map(tab => (
+        <TouchableOpacity
+          key={tab}
+          onPress={() => setActiveTab(tab)}
+          activeOpacity={0.7}
+          className={`px-4 py-2 rounded-full ${
+            activeTab === tab
+              ? "bg-blue-600 shadow-md"
+              : "bg-gray-200"
+          }`}
+        >
+          <Text className={`text-sm font-semibold ${
+            activeTab === tab ? "text-white" : "text-gray-600"
+          }`}>
+            {tab}
+          </Text>
+        </TouchableOpacity>
+      ))}
+    </View>
 
       {/* Add Task Button */}
       <TouchableOpacity
-        className="bg-blue-600/80 rounded-full shadow-lg absolute bottom-0 right-0 m-6 p-2 z-50"
+        className="absolute bottom-6 right-6 z-50"
         onPress={() => router.push("/tasks/form")}
+        activeOpacity={0.8}
       >
-        <MaterialIcons name="add" size={40} color="#fff" />
+        <View className="bg-blue-500 p-4 rounded-full shadow-lg items-center justify-center">
+          <MaterialIcons name="add" size={28} color="#fff" />
+        </View>
       </TouchableOpacity>
 
-      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 24 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1, padding: 20 }}>
         {tasks.length === 0 ? (
-          <Text className="text-gray-600 text-center mt-10">No tasks found.</Text>
+          <View className="mt-12 items-center">
+            <MaterialIcons name="task" size={60} color="#cbd5e1" />
+            <Text className="text-gray-400 text-lg mt-4">No tasks found</Text>
+            <Text className="text-gray-500 mt-1">Tap + to add a task</Text>
+          </View>
         ) : (
           tasks.map(task => (
-            <View key={task.id} className="bg-white p-4 rounded-2xl mb-4 border border-gray-300 shadow-md">
-              <TouchableOpacity
-                onPress={() => router.push({ pathname: "/tasks/[id]", params: { id: task.id } })}
-                className="flex-row justify-between items-center mb-2"
-              >
+            <View
+              key={task.id}
+              className="p-5 rounded-2xl mb-4 shadow-md border border-gray-200"
+              style={{ backgroundColor: task.completed ? "#d1fae5" : "#fff" }}
+            >
+              <View className="flex-row justify-between items-start">
                 <View className="flex-1 mr-2">
-                  <Text className="text-gray-800 text-lg font-semibold mb-1">{task.title}</Text>
-                  <Text className="text-gray-500 mb-1">Subject: {subjectsMap[task.subjectId]}</Text>
-                  <Text className="text-gray-600 mb-1">Priority: {task.priority}</Text>
-                  <Text className={`font-medium ${task.completed ? "text-green-600" : "text-yellow-600"}`}>
+                  <Text className={`text-lg font-bold ${task.completed ? "text-green-700" : "text-gray-800"}`}>
+                    {task.title}
+                  </Text>
+                  <Text className="text-gray-500 mt-1">Subject: {subjectsMap[task.subjectId]}</Text>
+                  <Text className="text-gray-500 mt-1">Priority: {task.priority}</Text>
+                  <Text className={`font-semibold mt-2 ${task.completed ? "text-green-600" : "text-yellow-600"}`}>
                     {task.completed ? "Completed" : "Pending"}
                   </Text>
-                  <Text className="text-gray-400 text-sm">Date: {formatDate(task.date)}</Text>
+                  <Text className="text-gray-400 text-sm mt-1">Date: {formatDate(task.date)}</Text>
                 </View>
 
                 <TouchableOpacity
                   onPress={e => { e.stopPropagation(); handleComplete(task.id, task.completed) }}
-                  className={`p-2 rounded-full ${task.completed ? "bg-green-100" : "bg-gray-100"}`}
+                  className={`p-2 rounded-full ${task.completed ? "bg-green-200" : "bg-gray-200"}`}
                 >
                   <MaterialIcons
                     name={task.completed ? "check-circle" : "radio-button-unchecked"}
@@ -124,14 +145,14 @@ const Tasks = () => {
                     color={task.completed ? "#16A34A" : "#6B7280"}
                   />
                 </TouchableOpacity>
-              </TouchableOpacity>
+              </View>
 
-              <View className="flex-row justify-end mt-2 space-x-3">
-                <TouchableOpacity onPress={() => handleEdit(task.id)} className="p-2 rounded-full bg-yellow-500">
-                  <MaterialIcons name="edit" size={28} color="#fff" />
+              <View className="flex-row justify-end mt-3 space-x-3 gap-2">
+                <TouchableOpacity onPress={() => handleEdit(task.id)} className="p-2 rounded-full bg-yellow-500 shadow-md">
+                  <MaterialIcons name="edit" size={22} color="#fff" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleDelete(task.id)} className="p-2 rounded-full bg-red-500">
-                  <MaterialIcons name="delete" size={28} color="#fff" />
+                <TouchableOpacity onPress={() => handleDelete(task.id)} className="p-2 rounded-full bg-red-500 shadow-md">
+                  <MaterialIcons name="delete" size={22} color="#fff" />
                 </TouchableOpacity>
               </View>
             </View>
