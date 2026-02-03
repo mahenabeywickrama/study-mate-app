@@ -6,7 +6,10 @@ export default function ProfileLayout() {
     <Stack>
       <Stack.Screen
         name="index"
-        options={{ title: "My Profile" }}
+        options={{ 
+            title: "My Profile",
+            headerTitleAlign: "center"
+        }}
       />
       <Stack.Screen
         name="form"

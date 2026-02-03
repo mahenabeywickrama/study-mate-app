@@ -33,7 +33,12 @@ export const registerUser = async (
 }
 
 export const logoutUser = async () => {
-  await signOut(auth)
-  AsyncStorage.clear()
-  return
+  try {
+    await signOut(auth)
+    AsyncStorage.clear()
+    return true
+  } catch (error) {
+    console.log("Logout error:", error)
+    return false
+  }
 }
