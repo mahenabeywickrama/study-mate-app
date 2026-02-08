@@ -1,50 +1,233 @@
-# Welcome to your Expo app 👋
+# 📚 StudyMate – Student Study Planner Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 📌 Project Overview
 
-## Get started
+StudyMate is a cross-platform mobile application designed to help students effectively plan, organize, and manage their academic activities.
 
-1. Install dependencies
+With increasing academic workloads, students often struggle with time management, deadlines, and maintaining consistent study routines. StudyMate solves this problem by providing a centralized study planning platform where users can manage subjects, assignments, and study schedules in one place.
 
-   ```bash
-   npm install
-   ```
+The application focuses on:
+* **Productivity**
+* **Organization**
+* **Simplicity**
+* **Better academic performance**
 
-2. Start the app
+This project was developed using **React Native (Expo)** as part of the final coursework requirement for building a complete mobile application with authentication, state management, navigation, and CRUD operations.
 
-   ```bash
-   npx expo start
-   ```
+---
 
-In the output, you'll find options to open the app in a
+## 🚀 Key Features
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### 🔐 Authentication
+* Secure login & logout
+* Personal user accounts
+* Protected routes
+* Persistent sessions
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 📖 Subject Management (CRUD)
+* Add subjects
+* Edit subject details
+* View subject list
+* Delete subjects
 
-## Get a fresh project
+### 🗓 Study Schedule Management (CRUD)
+* Create study sessions
+* Assign date & time
+* Link to subjects
+* Track upcoming sessions
 
-When you're ready, run:
+### 📝 Assignment Tracking (CRUD)
+* Add assignments
+* Set priority levels
+* Mark as completed
+* Delete or update tasks
 
-```bash
-npm run reset-project
+### 📊 Dashboard Overview
+* Upcoming study sessions
+* Pending assignments
+* Completed tasks summary
+* Quick workload visualization
+
+### 👤 Profile Management
+* Edit personal information
+* Profile image upload (camera/gallery)
+* Logout
+
+### 🎨 UI/UX
+* Clean modern interface
+* Responsive mobile design
+* Smooth navigation
+* Easy-to-use layout
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+* **React Native (Expo)**
+* **TypeScript**
+* **Expo Router**
+* **NativeWind** (Tailwind CSS)
+
+### State Management
+* **React Context API**
+* **Hooks**
+
+### Backend / Data Persistence
+* **Firebase Authentication**
+* **Firestore Database**
+* **Cloud image storage** (Cloudinary)
+
+### Storage
+* **AsyncStorage** (session persistence)
+
+---
+
+## 🧱 Architecture
+
+StudyMate follows a modular and scalable structure:
+
+```
+app/
+ ├─ (auth)/         → login/register screens
+ ├─ (dashboard)/    → main app screens
+ │    ├─ tasks/
+ │    ├─ subjects/
+ │    ├─ profile/
+ │    └─ index.tsx
+services/           → API/database logic
+hooks/              → reusable hooks
+components/         → UI components
+context/            → global state
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Architecture Pattern
+* **UI Layer** (Screens/Components)
+* **Service Layer** (CRUD operations)
+* **State Layer** (Context)
+* **Backend** (Firebase/Cloud)
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## ⚙️ Installation & Setup
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 1. Clone repository
 
-## Join the community
+```bash
+git clone https://github.com/mahenabeywickrama/study-mate-app.git
+cd studymate
+```
 
-Join our community of developers creating universal apps.
+### 2. Install dependencies
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+```bash
+npm install
+```
+
+### 3. Start Expo
+
+```bash
+npx expo start
+```
+
+### 4. Run on device
+* **Android** → press `a`
+* **iOS** → press `i`
+* Or scan QR using Expo Go
+
+---
+
+## 📦 Build Instructions
+
+### Android APK
+
+```bash
+eas build -p android
+```
+
+### iOS
+
+```bash
+eas build -p ios
+```
+
+---
+
+## 📸 Screenshots
+
+*(Add screenshots here)*
+
+* Dashboard
+* Tasks screen
+* Subjects screen
+* Profile page
+* Authentication
+
+---
+
+## 🎥 Demo Video
+
+👉 **YouTube Demo:** [Add link here]
+
+---
+
+## 📱 APK / Build
+
+👉 **Download APK:** [Add link here]
+
+---
+
+## ✅ Coursework Requirements Coverage
+
+| Requirement | Implemented |
+|------------|-------------|
+| Authentication | ✅ |
+| CRUD Operations | ✅ |
+| State Management | ✅ |
+| Navigation | ✅ |
+| Responsive UI | ✅ |
+| Backend Integration | ✅ |
+| Android/iOS Build | ✅ |
+| Documentation | ✅ |
+
+---
+
+## 🧠 Learning Outcomes
+
+Through this project, the following concepts were practiced:
+
+* Cross-platform mobile development
+* Authentication systems
+* Database integration
+* RESTful service architecture
+* State management
+* Navigation patterns
+* Clean code practices
+* Mobile UI/UX design
+
+---
+
+## ✨ Extra Features & Enhancements
+
+* Profile image upload (camera/gallery)
+* Task priority levels
+* Dashboard analytics
+* Pull-to-refresh
+* Optimized rendering
+* Modular services
+* Scalable architecture
+
+---
+
+## 👨‍💻 Author
+
+**Mahen Abeywickrama**  
+Software Engineering Student
+
+**GitHub:** https://github.com/mahenabeywickrama
+
+---
+
+## 📄 License
+
+Developed for academic purposes.
