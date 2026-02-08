@@ -173,7 +173,7 @@ eas build -p ios
 
 ## 📱 APK / Build
 
-👉 **Download APK:** [Add link here]
+👉 **Download APK:** [https://drive.google.com/file/d/1hOwu3QK83k7jS1iPV0DQthrVUUYzIDtQ/view?usp=sharing]
 
 ---
 
