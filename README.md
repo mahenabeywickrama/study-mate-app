@@ -167,7 +167,7 @@ eas build -p ios
 
 ## 🎥 Demo Video
 
-👉 **YouTube Demo:** [Add link here]
+👉 **YouTube Demo:** [https://www.youtube.com/watch?v=Z0NiWqIuM1s]
 
 ---
 
